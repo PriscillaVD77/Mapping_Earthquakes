@@ -22,20 +22,26 @@ let baseMaps = {
 let map = L.map('mapid', {
     center: [43.7,-79.3],
     zoom: 11,
-    layers: [satellitestreets],
+    layers: [streets],
 });
 // Pass our map layers into our layers control and add the layers control to the map.
 L.control.layers(baseMaps).addTo(map);
 //ACCESSING THE AIRPORT geoJSON
 let torontoHood = 'https://raw.githubusercontent.com/PriscillaVD77/Mapping_Earthquakes/main/torontoNeighborhoods.json'
-
-//Grabbing our GeoJSON data
-d3.json(torontoData).then(function(data) {
-    console.log(data);
+//creat my style
+let myStyle = {
+    color: "blue",
+    fillColor: "yellow",
+    weight: 1
+    
+}
+d3.json(torontoHood).then(function(data) {
+    console.log(data); 
     // Creating a GeoJSON layer with the retwieved data
-    L.geoJson(data, 
-    onEachFeature: function(feature, layer) {
+    L.geoJson(data, {
+        style: myStyle,
+        onEachFeature: function(feature, layer) {
         console.log(layer);
-        layer.bindPopup("<h2> Airline: " + feature.properties.airline + "</h2> <hr> <h3> Destination: " + feature.properties.dst + "</h3>");}
+        layer.bindPopup("<h2> Neighborhood: " + feature.properties.AREA_NAME + "</h2>")}
         
-}).addTo(map);})
+    }).addTo(map);})
