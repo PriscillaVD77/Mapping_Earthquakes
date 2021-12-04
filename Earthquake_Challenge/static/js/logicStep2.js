@@ -20,28 +20,45 @@ let baseMaps = {
 
 // Create the map objects with center, zoom level and default layer.
 let map = L.map('mapid', {
-    center: [43.7,-79.3],
-    zoom: 11,
+    center: [39.5, -98.5],
+    zoom: 3,
     layers: [streets],
 });
 // Pass our map layers into our layers control and add the layers control to the map.
 L.control.layers(baseMaps).addTo(map);
 //ACCESSING THE AIRPORT geoJSON
-let torontoHood = 'https://raw.githubusercontent.com/PriscillaVD77/Mapping_Earthquakes/main/torontoNeighborhoods.json'
-//creat my style
-let myStyle = {
-    color: "blue",
-    fillColor: "yellow",
-    weight: 1
-    
+let earthquakeSum = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson'
+
+// get radius of marker (radius of zero willbe plotted as 1)
+function getRadius(magnitude) {
+    if (magnitude == 0) {
+        return 1;
+    }
+    return magnitude * 4;
 }
-d3.json(torontoHood).then(function(data) {
+
+// returns style data for each of the earthquakes the map
+function styleInfo(feature) {
+    return {
+        opacity: 1,
+        fillOpacity: 1,
+        fillColor: '#ffae42',
+        color: "#000000",
+        radius: getRadius(feature.properties.mag),
+        stroke: true,
+        weight: 0.5
+    }
+
+};  
+
+d3.json(earthquakeSum).then(function(data) {
     console.log(data); 
-    // Creating a GeoJSON layer with the retwieved data
+    // Creating a GeoJSON layer with the retrieved data
     L.geoJson(data, {
-        style: myStyle,
-        onEachFeature: function(feature, layer) {
-        console.log(layer);
-        layer.bindPopup("<h2> Neighborhood: " + feature.properties.AREA_NAME + "</h2>")}
+        pointToLayer: function(feature, latlng) {
+        console.log(data);
+        return L.circleMarker(latlng);
+        },
+        style: styleInfo
         
     }).addTo(map);})

@@ -20,14 +20,14 @@ let baseMaps = {
 
 // Create the map objects with center, zoom level and default layer.
 let map = L.map('mapid', {
-    center: [43.7,-79.3],
-    zoom: 11,
+    center: [39.5, -98.5],
+    zoom: 3,
     layers: [streets],
 });
 // Pass our map layers into our layers control and add the layers control to the map.
 L.control.layers(baseMaps).addTo(map);
 //ACCESSING THE AIRPORT geoJSON
-let torontoHood = 'https://raw.githubusercontent.com/PriscillaVD77/Mapping_Earthquakes/main/torontoNeighborhoods.json'
+let earthquakeSum = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson'
 //creat my style
 let myStyle = {
     color: "blue",
@@ -35,7 +35,7 @@ let myStyle = {
     weight: 1
     
 }
-d3.json(torontoHood).then(function(data) {
+d3.json(earthquakeSum).then(function(data) {
     console.log(data); 
     // Creating a GeoJSON layer with the retwieved data
     L.geoJson(data, {
